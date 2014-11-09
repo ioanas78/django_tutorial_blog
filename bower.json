@@ -1,0 +1,25 @@
+{
+  "name": "django_tutorial_blog",
+  "version": "0.0.0",
+  "authors": [
+    "ioanas78"
+  ],
+  "description": "bower components",
+  "main": "mainfile",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals",
+    "node",
+    "yui"
+  ],
+  "keywords": [
+    "bower"
+  ],
+  "license": "MIT",
+  "homepage": "home",
+  "dependencies": {
+    "bootstrap": "~3.3.0",
+    "html5-boilerplate": "~4.3.0"
+  }
+}
