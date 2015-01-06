@@ -653,6 +653,9 @@ class PostViewTest(BaseAcceptanceTest):
 
         # Check the link is marked up properly
         self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
+        
+        # Check the correct template was used
+        self.assertTemplateUsed(response, 'blogengine/post_list.html')
 
     def test_post_page(self):
         # Create the category
@@ -728,6 +731,9 @@ class PostViewTest(BaseAcceptanceTest):
         # Check the link is marked up properly
         self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
         
+        # Check the correct template was used
+        self.assertTemplateUsed(response, 'blogengine/post_detail.html')
+
     def test_clear_cache(self):
         # Create the category
         #category = Category()
@@ -853,6 +859,43 @@ class PostViewTest(BaseAcceptanceTest):
         # Check the link is marked up properly
         self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
 
+        # Check the correct template was used
+        self.assertTemplateUsed(response, 'blogengine/tag_post_list.html')
+
+    def test_category_page(self):
+        # Create the post
+        post = PostFactory(text='This is [my first blog post](http://127.0.0.1:8000/)')
+        
+        # Check new post saved
+        all_posts = Post.objects.all()
+        self.assertEquals(len(all_posts), 1)
+        only_post = all_posts[0]
+        self.assertEquals(only_post, post)
+        
+        # Get the category URL
+        category_url = post.category.get_absolute_url()
+        
+        # Fetch the category
+        response = self.client.get(category_url)
+        self.assertEquals(response.status_code, 200)
+        
+        # Check the category name is in the response
+        self.assertTrue(post.category.name in response.content)
+        
+        # Check the post text is in the response
+        self.assertTrue(markdown.markdown(post.text) in response.content)
+        
+        # Check the post date is in the response
+        self.assertTrue(str(post.pub_date.year) in response.content)
+        self.assertTrue(post.pub_date.strftime('%b') in response.content)
+        self.assertTrue(str(post.pub_date.day) in response.content)
+        
+        # Check the link is marked up properly
+        self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
+        
+        # Check the correct template was used
+        self.assertTemplateUsed(response, 'blogengine/category_post_list.html')
+
     def test_nonexistent_category_page(self):
         category_url = '/category/blah/'
         response = self.client.get(category_url)
@@ -956,6 +999,37 @@ class FeedTest(BaseAcceptanceTest):
     
         # Check other post is not in this feed
         self.assertTrue('This is my <em>second</em> blog post' not in response.content)
+        
+    def test_tag_feed(self):
+          # Create a post
+          post = PostFactory(text='This is my *first* blog post')
+          tag = TagFactory()
+          post.tags.add(tag)
+          post.save()
+    
+          # Create another post with a different tag
+          tag2 = TagFactory(name='perl', description='The Perl programming language', slug='perl')
+          post2 = PostFactory(text='This is my *second* blog post', title='My second post', slug='my-second-post')
+          post2.tags.add(tag2)
+          post2.save()
+    
+          # Fetch the feed
+          response = self.client.get('/feeds/posts/tag/python/')
+          self.assertEquals(response.status_code, 200)
+    
+          # Parse the feed
+          feed = feedparser.parse(response.content)
+    
+          # Check length
+          self.assertEquals(len(feed.entries), 1)
+    
+          # Check post retrieved is the correct one
+          feed_post = feed.entries[0]
+          self.assertEquals(feed_post.title, post.title)
+          self.assertTrue('This is my <em>first</em> blog post' in feed_post.description)
+    
+          # Check other post is not in this feed
+          self.assertTrue('This is my <em>second</em> blog post' not in response.content)
 
 
 class FlatPageViewTest(BaseAcceptanceTest):
