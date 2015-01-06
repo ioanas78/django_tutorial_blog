@@ -49,6 +49,14 @@ class TagFactory(factory.django.DjangoModelFactory):
     description = 'The Python programming language'
     slug = 'python'
 
+class AuthorFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = User
+        django_get_or_create = ('username','email', 'password',)
+
+    username = 'testuser'
+    email = 'user@example.com'
+    password = 'password'
 
 # Create your tests here.
 class PostTest(TestCase):
@@ -87,8 +95,9 @@ class PostTest(TestCase):
         category = CategoryFactory()
     
         # Create the author
-        author = User.objects.create_user('testuser', 'user@example.com', 'password')
-        author.save()
+        #author = User.objects.create_user('testuser', 'user@example.com', 'password')
+        #author.save()
+        author = AuthorFactory()
 
         # Create the site
         #site = Site()
@@ -432,8 +441,9 @@ class AdminTest(BaseAcceptanceTest):
         tag = TagFactory()
         
         # Create the author
-        author = User.objects.create_user('testuser', 'user@example.com', 'password')
-        author.save()
+        #author = User.objects.create_user('testuser', 'user@example.com', 'password')
+        #author.save()
+        author = AuthorFactory()
     
         # Create the site
         #site = Site()
@@ -498,9 +508,10 @@ class AdminTest(BaseAcceptanceTest):
         tag = TagFactory()
         
         # Create the author
-        author = User.objects.create_user('testuser', 'user@example.com', 'password')
-        author.save()
-    
+        #author = User.objects.create_user('testuser', 'user@example.com', 'password')
+        #author.save()
+        author = AuthorFactory()
+
         # Create the site
         #site = Site()
         #site.name = 'example.com'
@@ -559,8 +570,9 @@ class PostViewTest(BaseAcceptanceTest):
         tag = TagFactory(name='perl', description='The Perl programming language')
 
         # Create the author
-        author = User.objects.create_user('testuser', 'user@example.com', 'password')
-        author.save()
+        #author = User.objects.create_user('testuser', 'user@example.com', 'password')
+        #author.save()
+        author = AuthorFactory()
 
         # Create the site
         #site = Site()
@@ -626,8 +638,9 @@ class PostViewTest(BaseAcceptanceTest):
         tag = TagFactory(name='perl', description='The Perl programming language')
 
         # Create the author
-        author = User.objects.create_user('testuser', 'user@example.com', 'password')
-        author.save()
+        #author = User.objects.create_user('testuser', 'user@example.com', 'password')
+        #author.save()
+        author = AuthorFactory()
 
         # Create the site
         #site = Site()
@@ -699,9 +712,10 @@ class PostViewTest(BaseAcceptanceTest):
         tag = TagFactory(name='perl', description='The Perl programming language')
 
         # Create the author
-        author = User.objects.create_user('testuser', 'user@example.com', 'password')
-        author.save()
-    
+        #author = User.objects.create_user('testuser', 'user@example.com', 'password')
+        #author.save()
+        author = AuthorFactory()
+
         # Create the site
         #site = Site()
         #site.name = 'example.com'
@@ -758,9 +772,10 @@ class PostViewTest(BaseAcceptanceTest):
         tag = TagFactory()
    
         # Create the author
-        author = User.objects.create_user('testuser', 'user@example.com', 'password')
-        author.save()
-    
+        #author = User.objects.create_user('testuser', 'user@example.com', 'password')
+        #author.save()
+        author = AuthorFactory()
+
         # Create the site
         #site = Site()
         #site.name = 'example.com'
@@ -835,8 +850,9 @@ class FeedTest(BaseAcceptanceTest):
         tag = TagFactory()
 
         # Create the author
-        author = User.objects.create_user('testuser', 'user@example.com', 'password')
-        author.save()
+        #author = User.objects.create_user('testuser', 'user@example.com', 'password')
+        #author.save()
+        author = AuthorFactory()
 
         # Create the site
         #site = Site()
