@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.views.generic import ListView
 from blogengine.models import Category, Post, Tag
 from django.contrib.syndication.views import Feed
+from django.utils.encoding import force_unicode
+from django.utils.safestring import mark_safe
+import markdown2
 
 # Create your views here.
 class CategoryListView(ListView):
@@ -23,6 +26,7 @@ class TagListView(ListView):
         except Tag.DoesNotExist:
             return Post.objects.none()
 
+
 class PostsFeed(Feed):
     title = "RSS feed - posts"
     link = "feeds/posts/"
@@ -35,4 +39,7 @@ class PostsFeed(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.text
+        extras = ["fenced-code-blocks"]
+        content = mark_safe(markdown2.markdown(force_unicode(item.text),
+                                               extras = extras))
+        return content
