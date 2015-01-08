@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django.contrib.syndication',
+    'debug_toolbar',
 )
 
 SITE_ID = 1

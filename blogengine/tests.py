@@ -1,3 +1,5 @@
+from django.core.urlresolvers import reverse
+
 import factory.django
 
 from django.test import TestCase, LiveServerTestCase, Client
