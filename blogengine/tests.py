@@ -1108,3 +1108,21 @@ class SearchViewTest(BaseAcceptanceTest):
         response = self.client.get('/search?q=wibble&page=2')
         self.assertEquals(response.status_code, 200)
         self.assertTrue('No posts found' in response.content)
+
+class SitemapTest(BaseAcceptanceTest):
+    def test_sitemap(self):
+        # Create a post
+        post = PostFactory()
+
+        # Create a flat page
+        page = FlatPageFactory()
+
+        # Get sitemap
+        response = self.client.get('/sitemap.xml')
+        self.assertEquals(response.status_code, 200)
+
+        # Check post is present in sitemap
+        self.assertTrue('my-first-post' in response.content)
+
+        # Check page is present in sitemap
+        self.assertTrue('/about/' in response.content)
